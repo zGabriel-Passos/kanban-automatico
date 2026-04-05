@@ -1,6 +1,6 @@
 # 🤖 KanBan AI — Gerador Automático de Arquivos com IA
 
-> Projeto acadêmico que combina gerenciamento de tarefas no estilo Kanban com geração automática de arquivos via Inteligência Artificial (Groq API), persistência em nuvem (Firebase Firestore) e automação de desktop (PyAutoGUI).
+> Projeto pessoal que combina gerenciamento de tarefas no estilo Kanban com geração automática de arquivos via Inteligência Artificial (Groq API), persistência em nuvem (Firebase Firestore) e automação de desktop (PyAutoGUI).
 
 ---
 
@@ -25,7 +25,9 @@
 O **KanBan AI** é uma aplicação web local que automatiza a criação de arquivos de código ou documentação a partir de instruções em linguagem natural. O usuário descreve o que quer criar, e a IA planeja, gera e abre o arquivo automaticamente — tudo orquestrado por um board Kanban visual.
 
 ### Problema que resolve
-Desenvolvedores e estudantes frequentemente precisam criar arquivos repetitivos (páginas HTML, scripts JS, documentações Markdown). Este projeto automatiza esse processo usando IA generativa, reduzindo o tempo de scaffolding de projetos.
+Desenvolvedores frequentemente precisam criar arquivos repetitivos (páginas HTML, scripts JS, documentações Markdown). Este projeto automatiza esse processo usando IA generativa, reduzindo o tempo de scaffolding de projetos.
+
+> ⚠️ **Nota sobre a Groq API:** O modelo LLaMA 3.3 70B é excelente para planejamento e geração de texto, mas pode não produzir código perfeito em todos os casos. Para resultados melhores na geração de código, considere trocar para Claude (Anthropic) ou GPT-4 — a troca é simples, veja a seção [Possíveis Evoluções](#possíveis-evoluções).
 
 ---
 
@@ -231,8 +233,8 @@ Base URL: `http://localhost:5000`
 
 ### 1. Clonar o repositório
 ```bash
-git clone https://github.com/seu-usuario/kanban-ai.git
-cd kanban-ai
+git clone https://github.com/zGabriel-Passos/kanban-automatico.git
+cd kanban-automatico
 ```
 
 ### 2. Instalar dependências
@@ -327,6 +329,8 @@ FLASK_ENV=development
 
 ## Autor
 
-Desenvolvido como projeto acadêmico utilizando Flask, Firebase, Groq API e automação de desktop com PyAutoGUI.
+Desenvolvido por interesse pessoal utilizando Flask, Firebase, Groq API e automação de desktop com PyAutoGUI.
 
 **Stack resumida:** `Python` · `Flask` · `Firebase Firestore` · `Groq (LLaMA 3.3)` · `Vanilla JS` · `PyAutoGUI`
+
+**Repositório:** [github.com/zGabriel-Passos/kanban-automatico](https://github.com/zGabriel-Passos/kanban-automatico)

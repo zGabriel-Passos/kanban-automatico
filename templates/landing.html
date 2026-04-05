@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KanBan - Organize Your Workflow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <span class="logo-icon">📋</span>
+                    <span class="logo-text">KanBan</span>
+                </div>
+
+                <div class="nav-links" id="navLinks">
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How it Works</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+
+                <div class="nav-actions">
+                    <a href="/app" class="btn btn-primary">Start Free</a>
+                </div>
+
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <span class="badge badge-new">🚀 Now with Firebase Sync</span>
+                    <h1 class="hero-headline">Organize Your Workflow, <span class="gradient-text">Boost
+                            Productivity</span></h1>
+                    <p class="hero-subheadline">Visual task management that helps teams plan, organize, build and review
+                        projects with ease. Simple, powerful, and beautiful.</p>
+                    <div class="hero-cta">
+                        <a href="/app" class="btn btn-primary btn-lg">Get Started Free</a>
+                        <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
+                    </div>
+                    <p class="hero-trust">✓ No credit card required • ✓ Free forever • ✓ 2 min setup</p>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-card card-1">
+                        <div class="card-header">📝 Creating</div>
+                        <div class="card-item">Design new feature</div>
+                        <div class="card-item">Write documentation</div>
+                    </div>
+                    <div class="hero-card card-2">
+                        <div class="card-header">🔨 Build</div>
+                        <div class="card-item">Implement API</div>
+                        <div class="card-item">Create UI components</div>
+                    </div>
+                    <div class="hero-card card-3">
+                        <div class="card-header">✅ Review</div>
+                        <div class="card-item">Code review</div>
+                        <div class="card-item">Testing phase</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOCIAL PROOF -->
+    <section class="social-proof">
+        <div class="container">
+            <p class="social-proof-text">Trusted by teams at</p>
+            <div class="logos">
+                <span class="logo-item">🚀 Startups</span>
+                <span class="logo-item">💼 Agencies</span>
+                <span class="logo-item">🎨 Designers</span>
+                <span class="logo-item">👨‍💻 Developers</span>
+                <span class="logo-item">📊 Product Teams</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Features</span>
+                <h2 class="section-title">Everything you need to manage tasks</h2>
+                <p class="section-subtitle">Powerful features designed to make your workflow seamless</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Drag & Drop</h3>
+                    <p class="feature-desc">Intuitive drag and drop interface. Move tasks between columns effortlessly.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔥</div>
+                    <h3 class="feature-title">Real-time Sync</h3>
+                    <p class="feature-desc">Firebase integration ensures your tasks are saved instantly and securely.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🌓</div>
+                    <h3 class="feature-title">Dark/Light Mode</h3>
+                    <p class="feature-desc">Switch between themes to match your preference and reduce eye strain.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">Fully Responsive</h3>
+                    <p class="feature-desc">Works perfectly on desktop, tablet, and mobile devices.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-desc">Optimized performance with smooth animations and instant updates.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">Secure & Private</h3>
+                    <p class="feature-desc">Your data is encrypted and stored securely in Firebase.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">How It Works</span>
+                <h2 class="section-title">Get started in 3 simple steps</h2>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Create Tasks</h3>
+                    <p class="step-desc">Click the + button to add new tasks to your Creating column.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Organize Workflow</h3>
+                    <p class="step-desc">Drag tasks through Plan → Organize → Build → Review columns.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Track Progress</h3>
+                    <p class="step-desc">Monitor your task count and see your productivity grow.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Pricing</span>
+                <h2 class="section-title">Simple, transparent pricing</h2>
+                <p class="section-subtitle">Start free, upgrade when you need more</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 class="pricing-name">Free</h3>
+                    <div class="pricing-price">
+                        <span class="price">$0</span>
+                        <span class="period">/forever</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ Unlimited tasks</li>
+                        <li>✓ 5 columns workflow</li>
+                        <li>✓ Dark/Light mode</li>
+                        <li>✓ Firebase sync</li>
+                        <li>✓ Mobile responsive</li>
+                    </ul>
+                    <a href="/app" class="btn btn-secondary btn-block">Start Free</a>
+                </div>
+
+                <div class="pricing-card pricing-featured">
+                    <span class="badge badge-popular">Most Popular</span>
+                    <h3 class="pricing-name">Pro</h3>
+                    <div class="pricing-price">
+                        <span class="price">$9</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ Everything in Free</li>
+                        <li>✓ Custom columns</li>
+                        <li>✓ Team collaboration</li>
+                        <li>✓ Priority support</li>
+                        <li>✓ Advanced analytics</li>
+                    </ul>
+                    <a href="/app" class="btn btn-primary btn-block">Coming Soon</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3 class="pricing-name">Enterprise</h3>
+                    <div class="pricing-price">
+                        <span class="price">Custom</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ Everything in Pro</li>
+                        <li>✓ Unlimited teams</li>
+                        <li>✓ SSO & SAML</li>
+                        <li>✓ Dedicated support</li>
+                        <li>✓ Custom integrations</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary btn-block">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">FAQ</span>
+                <h2 class="section-title">Frequently Asked Questions</h2>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3 class="faq-question">Is it really free forever?</h3>
+                    <p class="faq-answer">Yes! The free plan includes all core features with no time limit. Upgrade only
+                        if you need advanced features.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Do I need a credit card to start?</h3>
+                    <p class="faq-answer">No credit card required. Just click "Start Free" and begin organizing your
+                        tasks immediately.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Is my data secure?</h3>
+                    <p class="faq-answer">Absolutely. We use Firebase for secure, encrypted storage. Your data is
+                        protected with industry-standard security.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Can I use it on mobile?</h3>
+                    <p class="faq-answer">Yes! KanBan is fully responsive and works perfectly on all devices - desktop,
+                        tablet, and mobile.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Can I collaborate with my team?</h3>
+                    <p class="faq-answer">Team collaboration is coming soon in the Pro plan. Stay tuned for updates!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-final">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to boost your productivity?</h2>
+                <p class="cta-subtitle">Join thousands of users organizing their workflow with KanBan</p>
+                <a href="/app" class="btn btn-primary btn-lg">Start Free Now →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">📋</span>
+                        <span class="logo-text">KanBan</span>
+                    </div>
+                    <p>Simple, powerful task management</p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="#features">Features</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="/app">Dashboard</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <a href="#">About</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Contact</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="#">Privacy</a>
+                        <a href="#">Terms</a>
+                        <a href="#">Security</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 KanBan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='landing.js') }}"></script>
+</body>
+
+</html>

@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KanBan AI — Gerador Automatico de Arquivos com IA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* === DESIGN SYSTEM === */
+        :root {
+            --color-primary:    #10b981;
+            --color-accent:     #34d399;
+            --color-bg:         #0a0a0a;
+            --color-bg-subtle:  #111111;
+            --color-surface:    #1a1a1a;
+            --color-text:       #f0f0f0;
+            --color-text-muted: #777777;
+            --color-border:     #252525;
+            --color-border-hover: #444444;
+
+            --accent-rgb: 16, 185, 129;
+
+            --font-display: 'Space Mono', monospace;
+            --font-body: 'IBM Plex Sans', sans-serif;
+
+            --text-xs:   0.75rem;
+            --text-sm:   0.875rem;
+            --text-base: 1rem;
+            --text-lg:   1.25rem;
+            --text-xl:   1.5rem;
+            --text-2xl:  2rem;
+            --text-3xl:  2.8rem;
+            --text-4xl:  3.5rem;
+
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+
+            --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md:  0 4px 16px rgba(0,0,0,0.12);
+            --shadow-lg:  0 12px 40px rgba(0,0,0,0.25);
+            --shadow-accent: 0 8px 30px rgba(var(--accent-rgb), 0.30);
+
+            --container: 1200px;
+            --section-py: 96px;
+        }
+
+        /* === RESET === */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+        ul { list-style: none; }
+
+        /* === LAYOUT === */
+        .container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(32px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.3); }
+            50% { box-shadow: 0 0 0 12px rgba(var(--accent-rgb), 0); }
+        }
+        @keyframes grid-line {
+            0% { opacity: 0.03; }
+            50% { opacity: 0.07; }
+            100% { opacity: 0.03; }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === BUTTONS === */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: var(--radius-md);
+            font-family: var(--font-display);
+            font-size: var(--text-sm);
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 48px;
+        }
+        .btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+        .btn-primary {
+            background: var(--color-primary);
+            color: #000;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-accent);
+            background: var(--color-accent);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text);
+            border: 1.5px solid var(--color-border);
+        }
+        .btn-secondary:hover {
+            border-color: var(--color-text-muted);
+            transform: translateY(-2px);
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-accent);
+            padding: 14px 16px;
+        }
+        .btn-ghost:hover { color: #fff; }
+
+        /* === BADGE === */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            font-family: var(--font-display);
+            font-size: var(--text-xs);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .badge-accent {
+            background: rgba(var(--accent-rgb), 0.12);
+            color: var(--color-accent);
+            border: 1px solid rgba(var(--accent-rgb), 0.2);
+        }
+        .badge-outline {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+        }
+
+        /* === ICON === */
+        .icon {
+            width: 1em;
+            height: 1em;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .icon-lg { font-size: 32px; }
+        .icon-xl { font-size: 48px; }
+
+        .icon-container {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-lg);
+            background: rgba(var(--accent-rgb), 0.1);
+            border: 1px solid rgba(var(--accent-rgb), 0.15);
+            display: grid;
+            place-items: center;
+            color: var(--color-accent);
+            transition: all 0.2s ease;
+        }
+        .card:hover .icon-container {
+            background: rgba(var(--accent-rgb), 0.18);
+            box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.12);
+        }
+
+        /* =========================================
+           1. NAVBAR
+           ========================================= */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--color-border);
+        }
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: var(--text-lg);
+        }
+        .nav-logo .dot { color: var(--color-accent); }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+        .nav-links a {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            transition: color 0.2s ease;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--color-accent);
+            transition: width 0.2s ease;
+        }
+        .nav-links a:hover { color: var(--color-text); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-cta { display: flex; align-items: center; gap: 12px; }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--color-text);
+            transition: all 0.2s ease;
+        }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* Mobile nav */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: var(--color-bg);
+            border-bottom: 1px solid var(--color-border);
+            padding: 24px;
+        }
+        .mobile-nav.open { display: block; }
+        .mobile-nav a {
+            display: block;
+            padding: 12px 0;
+            font-size: var(--text-base);
+            color: var(--color-text-muted);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        /* =========================================
+           2. HERO SECTION
+           ========================================= */
+        .hero {
+            padding: 160px 0 var(--section-py);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--color-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: grid-line 8s ease infinite;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(var(--accent-rgb), 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero .container { text-align: center; position: relative; z-index: 1; }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 6vw, var(--text-4xl));
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 .highlight {
+            color: var(--color-accent);
+            text-shadow: 0 0 40px rgba(var(--accent-rgb), 0.3);
+        }
+        .hero-sub {
+            font-size: var(--text-lg);
+            color: var(--color-text-muted);
+            max-width: 640px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+        }
+        .hero-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .hero-trust {
+            margin-top: 2rem;
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .hero-trust svg { color: var(--color-accent); }
+
+        /* Hero visual — terminal mockup */
+        .hero-visual {
+            margin-top: 4rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+            animation: fadeUp 0.8s ease 0.3s both;
+        }
+        .terminal-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 18px;
+            background: var(--color-bg);
+            border-bottom: 1px solid var(--color-border);
+        }
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .terminal-dot.red { background: #ff5f57; }
+        .terminal-dot.yellow { background: #febc2e; }
+        .terminal-dot.green { background: #28c840; }
+        .terminal-body {
+            padding: 20px;
+            font-family: var(--font-display);
+            font-size: var(--text-sm);
+            line-height: 2;
+            color: var(--color-text-muted);
+        }
+        .terminal-body .prompt { color: var(--color-accent); }
+        .terminal-body .cmd { color: var(--color-text); }
+        .terminal-body .ok { color: #22c55e; }
+
+        /* =========================================
+           3. SOCIAL PROOF / LOGOS
+           ========================================= */
+        .social-proof {
+            padding: 48px 0;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            background: var(--color-bg-subtle);
+        }
+        .social-proof-text {
+            text-align: center;
+            font-family: var(--font-display);
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .social-proof-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+        .logo-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-display);
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+        .logo-item:hover { opacity: 1; }
+
+        /* =========================================
+           4. PROBLEMA / DOR
+           ========================================= */
+        .problem {
+            padding: var(--section-py) 0;
+        }
+        .section-label {
+            font-family: var(--font-display);
+            font-size: var(--text-xs);
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3.5vw, var(--text-2xl));
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+        .section-desc {
+            color: var(--color-text-muted);
+            max-width: 600px;
+            font-size: var(--text-base);
+            line-height: 1.8;
+        }
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            margin-top: 48px;
+        }
+        .problem-list { display: flex; flex-direction: column; gap: 20px; }
+        .problem-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .problem-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            display: grid;
+            place-items: center;
+            color: #ef4444;
+            flex-shrink: 0;
+        }
+        .problem-item h3 { font-size: var(--text-base); margin-bottom: 4px; }
+        .problem-item p { color: var(--color-text-muted); font-size: var(--text-sm); }
+        .problem-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stat-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: center;
+            width: 100%;
+            max-width: 360px;
+        }
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            line-height: 1;
+        }
+        .stat-label {
+            margin-top: 8px;
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        /* =========================================
+           5. FEATURES / SOLUCAO
+           ========================================= */
+        .features {
+            padding: var(--section-py) 0;
+            background: var(--color-bg-subtle);
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+        .features-header { text-align: center; margin-bottom: 56px; }
+        .features-header .section-desc { margin: 0 auto; }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            transition: all 0.25s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-border-hover);
+            box-shadow: var(--shadow-md);
+        }
+        .card-icon { margin-bottom: 20px; }
+        .card h3 {
+            font-size: var(--text-base);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .card p {
+            color: var(--color-text-muted);
+            font-size: var(--text-sm);
+            line-height: 1.7;
+        }
+        .card-tag {
+            display: inline-block;
+            margin-top: 16px;
+            font-family: var(--font-display);
+            font-size: var(--text-xs);
+            color: var(--color-accent);
+            background: rgba(var(--accent-rgb), 0.08);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+        }
+
+        /* =========================================
+           6. COMO FUNCIONA
+           ========================================= */
+        .how-it-works {
+            padding: var(--section-py) 0;
+        }
+        .how-header { text-align: center; margin-bottom: 56px; }
+        .how-header .section-desc { margin: 0 auto; }
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            position: relative;
+        }
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 12.5%;
+            right: 12.5%;
+            height: 2px;
+            background: var(--color-border);
+        }
+        .step {
+            text-align: center;
+            position: relative;
+            padding: 0 8px;
+        }
+        .step-number {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-xl);
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            display: grid;
+            place-items: center;
+            margin: 0 auto 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        .step:hover .step-number {
+            border-color: var(--color-accent);
+            box-shadow: var(--shadow-accent);
+            animation: pulse-glow 2s ease infinite;
+        }
+        .step-number span {
+            font-family: var(--font-display);
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: var(--color-accent);
+        }
+        .step-tag {
+            font-family: var(--font-display);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+        }
+        .step h3 {
+            font-size: var(--text-base);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .step p {
+            color: var(--color-text-muted);
+            font-size: var(--text-sm);
+            line-height: 1.6;
+        }
+
+        /* =========================================
+           7. PROVA SOCIAL / NUMEROS
+           ========================================= */
+        .numbers {
+            padding: var(--section-py) 0;
+            background: var(--color-bg-subtle);
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            text-align: center;
+        }
+        .number-item { padding: 24px; }
+        .number-value {
+            font-family: var(--font-display);
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+        }
+        .number-label {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        /* =========================================
+           8. API ENDPOINTS
+           ========================================= */
+        .api-section {
+            padding: var(--section-py) 0;
+        }
+        .api-header { text-align: center; margin-bottom: 56px; }
+        .api-header .section-desc { margin: 0 auto; }
+        .api-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .api-group h3 {
+            font-family: var(--font-display);
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+        .api-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: border-color 0.2s ease;
+        }
+        .api-card:hover { border-color: var(--color-border-hover); }
+        .method {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            flex-shrink: 0;
+        }
+        .method.get { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .method.post { background: rgba(52,211,153,0.15); color: #34d399; }
+        .method.put { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .method.delete { background: rgba(248,113,113,0.15); color: #f87171; }
+        .api-path {
+            font-family: var(--font-display);
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+        }
+        .api-desc {
+            margin-left: auto;
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+            flex-shrink: 0;
+        }
+
+        /* =========================================
+           9. FAQ
+           ========================================= */
+        .faq {
+            padding: var(--section-py) 0;
+            background: var(--color-bg-subtle);
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+        .faq-header { text-align: center; margin-bottom: 48px; }
+        .faq-header .section-desc { margin: 0 auto; }
+        .faq-list { max-width: 720px; margin: 0 auto; }
+        .faq-item {
+            border-bottom: 1px solid var(--color-border);
+        }
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            text-align: left;
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            font-weight: 600;
+            color: var(--color-text);
+            transition: color 0.2s ease;
+        }
+        .faq-question:hover { color: var(--color-accent); }
+        .faq-icon {
+            transition: transform 0.3s ease;
+            color: var(--color-text-muted);
+        }
+        .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--color-accent); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .faq-answer-inner {
+            padding-bottom: 20px;
+            color: var(--color-text-muted);
+            font-size: var(--text-sm);
+            line-height: 1.8;
+        }
+
+        /* =========================================
+           10. CTA FINAL
+           ========================================= */
+        .cta-section {
+            padding: var(--section-py) 0;
+            text-align: center;
+            position: relative;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(var(--accent-rgb), 0.06) 0%, transparent 100%);
+            pointer-events: none;
+        }
+        .cta-section .container { position: relative; z-index: 1; }
+        .cta-section h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3.5vw, var(--text-2xl));
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .cta-section p {
+            color: var(--color-text-muted);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            font-size: var(--text-base);
+        }
+        .cta-buttons { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+        /* =========================================
+           11. FOOTER
+           ========================================= */
+        .footer {
+            padding: 48px 0;
+            border-top: 1px solid var(--color-border);
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: var(--text-base);
+            font-weight: 700;
+        }
+        .footer-logo .dot { color: var(--color-accent); }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            transition: color 0.2s ease;
+        }
+        .footer-links a:hover { color: var(--color-text); }
+        .footer-copy {
+            width: 100%;
+            text-align: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--color-border);
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+            .steps::before { display: none; }
+            .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+            .api-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            :root { --section-py: 64px; }
+            .nav-links, .nav-cta { display: none; }
+            .hamburger { display: flex; }
+            .features-grid { grid-template-columns: 1fr; }
+            .problem-grid { grid-template-columns: 1fr; }
+            .steps { grid-template-columns: 1fr; }
+            .numbers-grid { grid-template-columns: 1fr 1fr; }
+            .hero-visual { display: none; }
+            .api-desc { display: none; }
+            .hero-buttons .btn { width: 100%; justify-content: center; }
+            .cta-buttons .btn { width: 100%; justify-content: center; }
+            .social-proof-logos { gap: 24px; }
+            .footer-content { flex-direction: column; text-align: center; }
+        }
+        @media (max-width: 480px) {
+            .numbers-grid { grid-template-columns: 1fr; }
+            .container { padding: 0 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="nav-logo">
+                <span class="icon" style="font-size:20px;color:var(--color-accent);" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+                KanBan<span class="dot">.</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#workflow">Workflow</a>
+                <a href="#api">API</a>
+                <a href="#faq">FAQ</a>
+            </div>
+            <div class="nav-cta">
+                <a href="#how-it-works" class="btn btn-ghost">Saber mais</a>
+                <a href="/app" class="btn btn-primary">Abrir App &#8594;</a>
+            </div>
+            <button class="hamburger" aria-label="Menu" onclick="this.classList.toggle('active');document.getElementById('mobileNav').classList.toggle('open');">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="#features" onclick="this.parentElement.classList.remove('open')">Features</a>
+            <a href="#workflow" onclick="this.parentElement.classList.remove('open')">Workflow</a>
+            <a href="#api" onclick="this.parentElement.classList.remove('open')">API</a>
+            <a href="#faq" onclick="this.parentElement.classList.remove('open')">FAQ</a>
+            <a href="/app" onclick="this.parentElement.classList.remove('open')">Abrir App &#8594;</a>
+        </div>
+    </nav>
+
+    <!-- 2. HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <span class="badge badge-accent">Projeto Academico</span>
+            <h1>Descreva o que precisa.<br>A <span class="highlight">IA cria</span> para voce.</h1>
+            <p class="hero-sub">KanBan AI combina gerenciamento visual de tarefas com geracao automatica de arquivos via Inteligencia Artificial. Planeje, codifique e revise — tudo em um unico lugar.</p>
+            <div class="hero-buttons">
+                <a href="/app" class="btn btn-primary">Comecar agora &#8594;</a>
+                <a href="#features" class="btn btn-secondary">Ver features</a>
+            </div>
+            <div class="hero-trust">
+                <span class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></span>
+                Open source &bull; Sem cartao de credito &bull; 100% local
+            </div>
+
+            <!-- Terminal Mockup -->
+            <div class="hero-visual">
+                <div class="terminal-bar">
+                    <div class="terminal-dot red"></div>
+                    <div class="terminal-dot yellow"></div>
+                    <div class="terminal-dot green"></div>
+                </div>
+                <div class="terminal-body">
+                    <div><span class="prompt">&gt; </span><span class="cmd">Criar tarefa: Pagina de login moderna</span></div>
+                    <div><span class="prompt">&gt; </span><span class="cmd">Tipo: HTML | Pasta: /output</span></div>
+                    <div><span class="prompt">&gt; </span><span class="cmd">Gerando plano via IA...</span></div>
+                    <div><span class="ok">[OK]</span> Plano gerado com sucesso</div>
+                    <div><span class="prompt">&gt; </span><span class="cmd">Gerando arquivo...</span></div>
+                    <div><span class="ok">[OK]</span> Pagina_Login.html criado em /output</div>
+                    <div><span class="ok">[OK]</span> Arquivo aberto no navegador</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. SOCIAL PROOF -->
+    <section class="social-proof">
+        <div class="container">
+            <p class="social-proof-text">Desenvolvido com</p>
+            <div class="social-proof-logos">
+                <span class="logo-item">
+                    <span class="icon" style="font-size:18px;" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 7.9a10 10 0 0 0-16.4 0"/><path d="M12 2v6"/><path d="M12 18a4 4 0 1 0 0-8"/></svg></span>
+                    Python 3
+                </span>
+                <span class="logo-item">
+                    <span class="icon" style="font-size:18px;" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+                    Flask 3.0
+                </span>
+                <span class="logo-item">
+                    <span class="icon" style="font-size:18px;" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                    Firebase
+                </span>
+                <span class="logo-item">
+                    <span class="icon" style="font-size:18px;" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
+                    Groq LLM
+                </span>
+                <span class="logo-item">
+                    <span class="icon" style="font-size:18px;" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+                    Vanilla JS
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. PROBLEMA / DOR -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <span class="section-label">O problema</span>
+            <h2 class="section-title">Voce perde tempo criando arquivos<br>que a IA poderia gerar em segundos</h2>
+            <p class="section-desc">Desenvolvedores e estudantes gastam horas criando scaffolding basico, paginas repetitivas e documentacao padrao — trabalho que poderia ser automatizado.</p>
+            <div class="problem-grid">
+                <div class="problem-list">
+                    <div class="problem-item animate-on-scroll">
+                        <div class="problem-icon" aria-hidden="true">
+                            <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></span>
+                        </div>
+                        <div>
+                            <h3>Tarefas repetitivas e cansativas</h3>
+                            <p>Criar a mesma estrutura de arquivos para cada novo projeto consome tempo e energia criativa.</p>
+                        </div>
+                    </div>
+                    <div class="problem-item animate-on-scroll">
+                        <div class="problem-icon" aria-hidden="true">
+                            <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></span>
+                        </div>
+                        <div>
+                            <h3>Falta de organizacao no fluxo de trabalho</h3>
+                            <p>Sem um sistema visual, tarefas ficam espalhadas em notas, chats e memoria — nada e rastreado.</p>
+                        </div>
+                    </div>
+                    <div class="problem-item animate-on-scroll">
+                        <div class="problem-icon" aria-hidden="true">
+                            <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></span>
+                        </div>
+                        <div>
+                            <h3>IA generica exige varios prompts</h3>
+                            <p>Chatbots exigem iteracoes manuais. Sem contexto do projeto, a resposta raramente esta pronta para uso.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="problem-visual animate-on-scroll">
+                    <div class="stat-card">
+                        <div class="stat-number">67%</div>
+                        <div class="stat-label">do tempo de desenvolvimento e gasto em tarefas repetitivas de scaffolding e boilerplate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. FEATURES / SOLUCAO -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="features-header animate-on-scroll">
+                <span class="section-label">Solucao</span>
+                <h2 class="section-title">Tudo que voce precisa para criar arquivos com IA</h2>
+                <p class="section-desc">Do planejamento a geracao, com organizacao visual e salvamento automatico na nuvem.</p>
+            </div>
+            <div class="features-grid">
+                <div class="card animate-on-scroll">
+                    <div class="card-icon"><div class="icon-container" aria-hidden="true"><span class="icon" style="font-size:24px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="12" rx="2"/><path d="M2 12h20"/><path d="m7 15-.87.87a1 1 0 0 0 1.41 1.41L9 15.82a1 1 0 0 0-1-.82H7Z"/></svg></span></div></div>
+                    <h3>IA Generativa com LLaMA 3.3</h3>
+                    <p>Groq API com modelo 70B gera planos estruturados e conteudo de arquivos a partir de instrucoes em linguagem natural.</p>
+                    <span class="card-tag">Groq API</span>
+                </div>
+                <div class="card animate-on-scroll">
+                    <div class="card-icon"><div class="icon-container" aria-hidden="true"><span class="icon" style="font-size:24px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span></div></div>
+                    <h3>Board Kanban Visual</h3>
+                    <p>Organize tarefas em 4 colunas: Idle, Plan, Build, Review. Drag & Drop nativo para mover cards entre etapas.</p>
+                    <span class="card-tag">Frontend</span>
+                </div>
+                <div class="card animate-on-scroll">
+                    <div class="card-icon"><div class="icon-container" aria-hidden="true"><span class="icon" style="font-size:24px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m7.5 4.21 4.5 2.6 4.5-2.6"/><path d="M7.5 19.79V14.6L3 12"/><path d="m21 12-4.5 2.6v5.19"/></svg></span></div></div>
+                    <h3>Persistencia Firebase</h3>
+                    <p>Cloud Firestore armazena todas as tarefas, planos e arquivos. Dados seguros e acessiveis de qualquer dispositivo.</p>
+                    <span class="card-tag">Firestore</span>
+                </div>
+                <div class="card animate-on-scroll">
+                    <div class="card-icon"><div class="icon-container" aria-hidden="true"><span class="icon" style="font-size:24px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span></div></div>
+                    <h3>Multi-formato de Arquivos</h3>
+                    <p>Gera arquivos em Markdown, HTML e JavaScript. Nome automatico derivado do titulo da tarefa.</p>
+                    <span class="card-tag">.md .html .js</span>
+                </div>
+                <div class="card animate-on-scroll">
+                    <div class="card-icon"><div class="icon-container" aria-hidden="true"><span class="icon" style="font-size:24px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></span></div></div>
+                    <h3>Automacao de Desktop</h3>
+                    <p>Apos gerar o arquivo, abre automaticamente no Edge via subprocess. PyAutoGUI como fallback.</p>
+                    <span class="card-tag">PyAutoGUI</span>
+                </div>
+                <div class="card animate-on-scroll">
+                    <div class="card-icon"><div class="icon-container" aria-hidden="true"><span class="icon" style="font-size:24px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></span></div></div>
+                    <h3>API REST Segura</h3>
+                    <p>CORS restrito, validacao de input, protecao XSS, credenciais via dotenv. Server-side com Firebase Admin SDK.</p>
+                    <span class="card-tag">Flask + CORS</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. COMO FUNCIONA -->
+    <section class="how-it-works" id="workflow">
+        <div class="container">
+            <div class="how-header animate-on-scroll">
+                <span class="section-label">Como funciona</span>
+                <h2 class="section-title">4 passos do prompt ao arquivo pronto</h2>
+                <p class="section-desc">Do ideia ao arquivo gerado em menos de 30 segundos. Sem configuracao complicada, sem iteracao manual.</p>
+            </div>
+            <div class="steps">
+                <div class="step animate-on-scroll">
+                    <div class="step-number"><span>1</span></div>
+                    <div class="step-tag">Idle</div>
+                    <h3>Crie a Tarefa</h3>
+                    <p>Preencha titulo, escolha a pasta, selecione o formato e descreva o que deseja criar.</p>
+                </div>
+                <div class="step animate-on-scroll">
+                    <div class="step-number"><span>2</span></div>
+                    <div class="step-tag">Plan</div>
+                    <h3>IA Planeja</h3>
+                    <p>LLaMA 3.3 gera um plano tecnico estruturado. Edite no modal antes de confirmar.</p>
+                </div>
+                <div class="step animate-on-scroll">
+                    <div class="step-number"><span>3</span></div>
+                    <div class="step-tag">Build</div>
+                    <h3>IA Constrai</h3>
+                    <p>Com base no plano, o modelo gera o conteudo completo e salva o arquivo na pasta escolhida.</p>
+                </div>
+                <div class="step animate-on-scroll">
+                    <div class="step-number"><span>4</span></div>
+                    <div class="step-tag">Review</div>
+                    <h3>Revise o Resultado</h3>
+                    <p>Arquivo abre automaticamente no navegador para sua revisao. Aprove ou regenere.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. NUMEROS / METRICAS -->
+    <section class="numbers">
+        <div class="container">
+            <div class="numbers-grid">
+                <div class="number-item animate-on-scroll">
+                    <div class="number-value">4</div>
+                    <div class="number-label">Colunas no Kanban</div>
+                </div>
+                <div class="number-item animate-on-scroll">
+                    <div class="number-value">3</div>
+                    <div class="number-label">Formatos de arquivo</div>
+                </div>
+                <div class="number-item animate-on-scroll">
+                    <div class="number-value">7</div>
+                    <div class="number-label">Endpoints na API</div>
+                </div>
+                <div class="number-item animate-on-scroll">
+                    <div class="number-value">30s</div>
+                    <div class="number-label">Tempo medio de geracao</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. API SECTION -->
+    <section class="api-section" id="api">
+        <div class="container">
+            <div class="api-header animate-on-scroll">
+                <span class="section-label">Documentacao</span>
+                <h2 class="section-title">API REST Completa</h2>
+                <p class="section-desc">7 endpoints organizados em 2 modulos. Base URL: <code style="color:var(--color-accent);">http://localhost:5000</code></p>
+            </div>
+            <div class="api-grid animate-on-scroll">
+                <div class="api-group">
+                    <h3>Gestao de Tarefas</h3>
+                    <div class="api-card">
+                        <span class="method get">GET</span>
+                        <span class="api-path">/api/tasks</span>
+                        <span class="api-desc">Listar tudo</span>
+                    </div>
+                    <div class="api-card">
+                        <span class="method post">POST</span>
+                        <span class="api-path">/api/tasks</span>
+                        <span class="api-desc">Criar tarefa</span>
+                    </div>
+                    <div class="api-card">
+                        <span class="method put">PUT</span>
+                        <span class="api-path">/api/tasks/:id</span>
+                        <span class="api-desc">Atualizar</span>
+                    </div>
+                    <div class="api-card">
+                        <span class="method delete">DELETE</span>
+                        <span class="api-path">/api/tasks/:id</span>
+                        <span class="api-desc">Remover</span>
+                    </div>
+                </div>
+                <div class="api-group">
+                    <h3>Pipeline de IA</h3>
+                    <div class="api-card">
+                        <span class="method post">POST</span>
+                        <span class="api-path">/api/ai/plan</span>
+                        <span class="api-desc">Gerar plano</span>
+                    </div>
+                    <div class="api-card">
+                        <span class="method post">POST</span>
+                        <span class="api-path">/api/ai/build</span>
+                        <span class="api-desc">Gerar arquivo</span>
+                    </div>
+                    <div class="api-card">
+                        <span class="method post">POST</span>
+                        <span class="api-path">/api/ai/review</span>
+                        <span class="api-desc">Abrir arquivo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. FAQ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="faq-header animate-on-scroll">
+                <span class="section-label">FAQ</span>
+                <h2 class="section-title">Perguntas frequentes</h2>
+                <p class="section-desc">Tudo que voce precisa saber para comecar a usar o KanBan AI.</p>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        O que e o KanBan AI?
+                        <span class="faq-icon icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">E uma aplicacao web local que automatiza a criacao de arquivos (.md, .html, .js) usando Inteligencia Artificial. Voce descreve o que precisa em linguagem natural e a IA planeja, gera e salva o arquivo automaticamente, tudo organizado em um board Kanban visual.</div></div>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Quais modelos de IA sao suportados?
+                        <span class="faq-icon icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Atualmente usa o modelo LLaMA 3.3 70B via Groq API. O modelo e excelente para geracao de codigo e documentos tecnicos, com resposta rapida e baixo custo.</div></div>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Preciso de conta no Firebase?
+                        <span class="faq-icon icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Sim. O Firebase Firestore e usado como banco de dados para persistir tarefas, planos e arquivos gerados. Voce precisa criar uma conta gratuita no Firebase e configurar o Service Account no arquivo .env.</div></div>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Como instalo e executo?
+                        <span class="faq-icon icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Execute 3 comandos: <code>pip install -r requirements.txt</code>, configure o arquivo <code>.env</code> com suas chaves de API, e finalmente <code>python main.py</code>. O app roda em <code>http://localhost:5000/app</code>.</div></div>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Posso acessar de outro dispositivo?
+                        <span class="faq-icon icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Sim! O servidor roda em <code>0.0.0.0:5000</code>, entao qualquer dispositivo na mesma rede Wi-Fi pode acessar via <code>http://SEU_IP:5000/app</code>.</div></div>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Quais tipos de arquivo posso gerar?
+                        <span class="faq-icon icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Markdown (.md), HTML (.html) e JavaScript (.js). O nome do arquivo e gerado automaticamente a partir do titulo da tarefa, com sanitizacao de caracteres especiais.</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. CTA FINAL -->
+    <section class="cta-section">
+        <div class="container animate-on-scroll">
+            <span class="badge badge-accent">Comece agora</span>
+            <h2>Pronto para automatizar sua criacao de arquivos?</h2>
+            <p>Configure em 5 minutos e nunca mais gaste tempo com scaffolding repetitivo.</p>
+            <div class="cta-buttons">
+                <a href="/app" class="btn btn-primary">Abrir KanBan AI &#8594;</a>
+                <a href="#features" class="btn btn-secondary">Rever features</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">KanBan<span class="dot">.</span></div>
+                <div class="footer-links">
+                    <a href="#features">Features</a>
+                    <a href="#workflow">Workflow</a>
+                    <a href="#api">API</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="/app">App</a>
+                </div>
+            </div>
+            <p class="footer-copy">Projeto Academico &bull; Flask + Firebase Firestore + Groq LLaMA 3.3 + PyAutoGUI + Vanilla JS &bull; 2026</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Scroll animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ toggle
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const answer = item.querySelector('.faq-answer');
+            const isOpen = item.classList.contains('open');
+
+            // Close all
+            document.querySelectorAll('.faq-item').forEach(i => {
+                i.classList.remove('open');
+                i.querySelector('.faq-answer').style.maxHeight = '0';
+            });
+
+            // Open clicked if was closed
+            if (!isOpen) {
+                item.classList.add('open');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+        }
+
+        // Close mobile nav on external click
+        document.addEventListener('click', (e) => {
+            const mobileNav = document.getElementById('mobileNav');
+            const hamburger = document.querySelector('.hamburger');
+            if (mobileNav.classList.contains('open') && !mobileNav.contains(e.target) && !hamburger.contains(e.target)) {
+                mobileNav.classList.remove('open');
+                hamburger.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -2,6 +2,8 @@
 
 > Projeto pessoal que combina gerenciamento de tarefas no estilo Kanban com geração automática de arquivos via Inteligência Artificial (Groq API), persistência em nuvem (Firebase Firestore) e automação de desktop (PyAutoGUI).
 
+> **Stack resumida:** `Python` · `Flask` · `Firebase Firestore` · `Groq (LLaMA 3.3)` · `Vanilla JS` · `PyAutoGUI`
+
 ![KanBan AI Preview](assets/preview.png)
 
 ---

@@ -4,7 +4,7 @@
 
 > **Stack resumida:** `Python` · `Flask` · `Firebase Firestore` · `Groq (LLaMA 3.3)` · `Vanilla JS` · `PyAutoGUI`
 
-![KanBan AI Preview](assets/preview.png)
+![KanBan AI Preview](assets/preview_now.png)
 
 ---
 
@@ -40,26 +40,26 @@ Desenvolvedores frequentemente precisam criar arquivos repetitivos (páginas HTM
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                        FRONTEND                             │
-│   HTML5 + CSS3 + Vanilla JavaScript (Fetch API)            │
+│   HTML5 + CSS3 + Vanilla JavaScript (Fetch API)             │
 │   Drag & Drop nativo · Modal de edição · Toast notifications│
 └────────────────────┬────────────────────────────────────────┘
                      │ HTTP REST (JSON)
 ┌────────────────────▼────────────────────────────────────────┐
 │                     BACKEND (Flask)                         │
 │                                                             │
-│  ┌─────────────┐  ┌──────────────┐  ┌───────────────────┐  │
-│  │  CRUD API   │  │   AI Routes  │  │  File System API  │  │
-│  │ /api/tasks  │  │ /api/ai/plan │  │  os.makedirs()    │  │
-│  │  GET·POST   │  │ /api/ai/build│  │  open() · write() │  │
-│  │  PUT·DELETE │  │ /api/ai/review│ │                   │  │
-│  └──────┬──────┘  └──────┬───────┘  └─────────┬─────────┘  │
+│  ┌─────────────┐  ┌──────────────┐  ┌───────────────────┐   │
+│  │  CRUD API   │  │   AI Routes  │  │  File System API  │   │
+│  │ /api/tasks  │  │ /api/ai/plan │  │  os.makedirs()    │   │
+│  │  GET·POST   │  │ /api/ai/build│  │  open() · write() │   │
+│  │  PUT·DELETE │  │ /api/ai/review│ │                   │   │
+│  └──────┬──────┘  └──────┬───────┘  └─────────┬─────────┘   │
 │         │                │                     │            │
 └─────────┼────────────────┼─────────────────────┼────────────┘
           │                │                     │
 ┌─────────▼──────┐ ┌───────▼────────┐ ┌──────────▼──────────┐
 │    Firebase    │ │   Groq API     │ │     Sistema Local   │
-│   Firestore   │ │ LLaMA 3.3 70B  │ │  Pasta de destino   │
-│  (ai_tasks)   │ │  (IA Generativa)│ │  PyAutoGUI · Edge   │
+│   Firestore    │ │ LLaMA 3.3 70B  │ │  Pasta de destino   │
+│  (ai_tasks)    │ │ (IA Generativa)│ │  PyAutoGUI · Edge   │
 └────────────────┘ └────────────────┘ └─────────────────────┘
 ```
 

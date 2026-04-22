@@ -4,328 +4,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KanBan - Organize Your Workflow</title>
+    <title>Micro SDLC - Agent Workflow Board</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
 </head>
 
 <body>
-    <!-- NAVBAR -->
     <nav class="navbar">
-        <div class="container">
-            <div class="nav-content">
-                <div class="logo">
-                    <span class="logo-icon">📋</span>
-                    <span class="logo-text">KanBan</span>
-                </div>
+        <div class="container nav-content">
+            <a href="/" class="brand">
+                <span class="brand-kicker">Agent Workflow Board</span>
+                <span class="brand-name">Micro SDLC</span>
+            </a>
 
-                <div class="nav-links" id="navLinks">
-                    <a href="#features">Features</a>
-                    <a href="#how-it-works">How it Works</a>
-                    <a href="#pricing">Pricing</a>
-                    <a href="#faq">FAQ</a>
-                </div>
-
-                <div class="nav-actions">
-                    <a href="/app" class="btn btn-primary">Start Free</a>
-                </div>
-
-                <button class="hamburger" id="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+            <div class="nav-links" id="navLinks">
+                <a href="#overview">Overview</a>
+                <a href="#features">Features</a>
+                <a href="#workflow">Workflow</a>
+                <a href="#faq">FAQ</a>
             </div>
+
+            <div class="nav-actions">
+                <a href="/app" class="btn btn-primary">Open Dashboard</a>
+            </div>
+
+            <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <span class="badge badge-new">🚀 Now with Firebase Sync</span>
-                    <h1 class="hero-headline">Organize Your Workflow, <span class="gradient-text">Boost
-                            Productivity</span></h1>
-                    <p class="hero-subheadline">Visual task management that helps teams plan, organize, build and review
-                        projects with ease. Simple, powerful, and beautiful.</p>
-                    <div class="hero-cta">
-                        <a href="/app" class="btn btn-primary btn-lg">Get Started Free</a>
-                        <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
-                    </div>
-                    <p class="hero-trust">✓ No credit card required • ✓ Free forever • ✓ 2 min setup</p>
-                </div>
-                <div class="hero-visual">
-                    <div class="hero-card card-1">
-                        <div class="card-header">📝 Creating</div>
-                        <div class="card-item">Design new feature</div>
-                        <div class="card-item">Write documentation</div>
-                    </div>
-                    <div class="hero-card card-2">
-                        <div class="card-header">🔨 Build</div>
-                        <div class="card-item">Implement API</div>
-                        <div class="card-item">Create UI components</div>
-                    </div>
-                    <div class="hero-card card-3">
-                        <div class="card-header">✅ Review</div>
-                        <div class="card-item">Code review</div>
-                        <div class="card-item">Testing phase</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SOCIAL PROOF -->
-    <section class="social-proof">
-        <div class="container">
-            <p class="social-proof-text">Trusted by teams at</p>
-            <div class="logos">
-                <span class="logo-item">🚀 Startups</span>
-                <span class="logo-item">💼 Agencies</span>
-                <span class="logo-item">🎨 Designers</span>
-                <span class="logo-item">👨‍💻 Developers</span>
-                <span class="logo-item">📊 Product Teams</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- FEATURES -->
-    <section class="features" id="features">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Features</span>
-                <h2 class="section-title">Everything you need to manage tasks</h2>
-                <p class="section-subtitle">Powerful features designed to make your workflow seamless</p>
-            </div>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3 class="feature-title">Drag & Drop</h3>
-                    <p class="feature-desc">Intuitive drag and drop interface. Move tasks between columns effortlessly.
+    <main>
+        <section class="hero" id="overview">
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <p class="eyebrow">Plan, Build, Review and Ship agents</p>
+                    <h1>Run your work like a compact engineering control room.</h1>
+                    <p class="hero-text">
+                        Micro SDLC turns task flow into a focused command board. Queue tickets, move them through planning,
+                        build outputs faster, and keep every step visible in one place.
                     </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔥</div>
-                    <h3 class="feature-title">Real-time Sync</h3>
-                    <p class="feature-desc">Firebase integration ensures your tasks are saved instantly and securely.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🌓</div>
-                    <h3 class="feature-title">Dark/Light Mode</h3>
-                    <p class="feature-desc">Switch between themes to match your preference and reduce eye strain.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3 class="feature-title">Fully Responsive</h3>
-                    <p class="feature-desc">Works perfectly on desktop, tablet, and mobile devices.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3 class="feature-title">Lightning Fast</h3>
-                    <p class="feature-desc">Optimized performance with smooth animations and instant updates.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3 class="feature-title">Secure & Private</h3>
-                    <p class="feature-desc">Your data is encrypted and stored securely in Firebase.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">How It Works</span>
-                <h2 class="section-title">Get started in 3 simple steps</h2>
-            </div>
-
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3 class="step-title">Create Tasks</h3>
-                    <p class="step-desc">Click the + button to add new tasks to your Creating column.</p>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3 class="step-title">Organize Workflow</h3>
-                    <p class="step-desc">Drag tasks through Plan → Organize → Build → Review columns.</p>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3 class="step-title">Track Progress</h3>
-                    <p class="step-desc">Monitor your task count and see your productivity grow.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PRICING -->
-    <section class="pricing" id="pricing">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Pricing</span>
-                <h2 class="section-title">Simple, transparent pricing</h2>
-                <p class="section-subtitle">Start free, upgrade when you need more</p>
-            </div>
-
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3 class="pricing-name">Free</h3>
-                    <div class="pricing-price">
-                        <span class="price">$0</span>
-                        <span class="period">/forever</span>
+                    <div class="hero-actions">
+                        <a href="/app" class="btn btn-primary btn-lg">Launch Board</a>
+                        <a href="#workflow" class="btn btn-secondary btn-lg">See Workflow</a>
                     </div>
-                    <ul class="pricing-features">
-                        <li>✓ Unlimited tasks</li>
-                        <li>✓ 5 columns workflow</li>
-                        <li>✓ Dark/Light mode</li>
-                        <li>✓ Firebase sync</li>
-                        <li>✓ Mobile responsive</li>
-                    </ul>
-                    <a href="/app" class="btn btn-secondary btn-block">Start Free</a>
-                </div>
-
-                <div class="pricing-card pricing-featured">
-                    <span class="badge badge-popular">Most Popular</span>
-                    <h3 class="pricing-name">Pro</h3>
-                    <div class="pricing-price">
-                        <span class="price">$9</span>
-                        <span class="period">/month</span>
+                    <div class="hero-meta">
+                        <span>Internal board feel</span>
+                        <span>Fast handoff flow</span>
+                        <span>Dark-first UI</span>
                     </div>
-                    <ul class="pricing-features">
-                        <li>✓ Everything in Free</li>
-                        <li>✓ Custom columns</li>
-                        <li>✓ Team collaboration</li>
-                        <li>✓ Priority support</li>
-                        <li>✓ Advanced analytics</li>
-                    </ul>
-                    <a href="/app" class="btn btn-primary btn-block">Coming Soon</a>
                 </div>
 
-                <div class="pricing-card">
-                    <h3 class="pricing-name">Enterprise</h3>
-                    <div class="pricing-price">
-                        <span class="price">Custom</span>
+                <div class="hero-preview">
+                    <div class="preview-shell">
+                        <div class="preview-topbar">
+                            <span class="preview-title">Micro SDLC</span>
+                            <span class="preview-status">1 workflow running</span>
+                        </div>
+                        <div class="preview-board">
+                            <div class="preview-column idle">
+                                <div class="preview-column-head">
+                                    <span>IDLE</span>
+                                    <span class="count">2</span>
+                                </div>
+                                <div class="preview-ticket ghost">+ New Ticket</div>
+                                <div class="preview-ticket">
+                                    <strong>#01 Landing refresh</strong>
+                                    <span>Queued for plan</span>
+                                </div>
+                            </div>
+                            <div class="preview-column plan">
+                                <div class="preview-column-head">
+                                    <span>PLAN</span>
+                                    <span class="count">1</span>
+                                </div>
+                                <div class="preview-ticket">
+                                    <strong>#02 Spec pass</strong>
+                                    <span>Planning in progress</span>
+                                </div>
+                            </div>
+                            <div class="preview-column build">
+                                <div class="preview-column-head">
+                                    <span>BUILD</span>
+                                    <span class="count">1</span>
+                                </div>
+                                <div class="preview-ticket active">
+                                    <em class="ticket-badge">active</em>
+                                    <strong>#03 Update HTML</strong>
+                                    <span>Folder: templates</span>
+                                    <span>Updated: 5m ago</span>
+                                </div>
+                            </div>
+                            <div class="preview-column review">
+                                <div class="preview-column-head">
+                                    <span>REVIEW</span>
+                                    <span class="count">0</span>
+                                </div>
+                                <div class="preview-empty">No tickets</div>
+                            </div>
+                        </div>
                     </div>
-                    <ul class="pricing-features">
-                        <li>✓ Everything in Pro</li>
-                        <li>✓ Unlimited teams</li>
-                        <li>✓ SSO & SAML</li>
-                        <li>✓ Dedicated support</li>
-                        <li>✓ Custom integrations</li>
-                    </ul>
-                    <a href="#" class="btn btn-secondary btn-block">Contact Sales</a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- FAQ -->
-    <section class="faq" id="faq">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">FAQ</span>
-                <h2 class="section-title">Frequently Asked Questions</h2>
-            </div>
-
-            <div class="faq-list">
-                <div class="faq-item">
-                    <h3 class="faq-question">Is it really free forever?</h3>
-                    <p class="faq-answer">Yes! The free plan includes all core features with no time limit. Upgrade only
-                        if you need advanced features.</p>
+        <section class="metrics">
+            <div class="container metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-value">4</span>
+                    <span class="metric-label">Focused workflow lanes</span>
                 </div>
-
-                <div class="faq-item">
-                    <h3 class="faq-question">Do I need a credit card to start?</h3>
-                    <p class="faq-answer">No credit card required. Just click "Start Free" and begin organizing your
-                        tasks immediately.</p>
+                <div class="metric-card">
+                    <span class="metric-value">1</span>
+                    <span class="metric-label">Board for plan to review</span>
                 </div>
-
-                <div class="faq-item">
-                    <h3 class="faq-question">Is my data secure?</h3>
-                    <p class="faq-answer">Absolutely. We use Firebase for secure, encrypted storage. Your data is
-                        protected with industry-standard security.</p>
-                </div>
-
-                <div class="faq-item">
-                    <h3 class="faq-question">Can I use it on mobile?</h3>
-                    <p class="faq-answer">Yes! KanBan is fully responsive and works perfectly on all devices - desktop,
-                        tablet, and mobile.</p>
-                </div>
-
-                <div class="faq-item">
-                    <h3 class="faq-question">Can I collaborate with my team?</h3>
-                    <p class="faq-answer">Team collaboration is coming soon in the Pro plan. Stay tuned for updates!</p>
+                <div class="metric-card">
+                    <span class="metric-value">0</span>
+                    <span class="metric-label">Noise-heavy screens</span>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- CTA FINAL -->
-    <section class="cta-final">
-        <div class="container">
-            <div class="cta-content">
-                <h2 class="cta-title">Ready to boost your productivity?</h2>
-                <p class="cta-subtitle">Join thousands of users organizing their workflow with KanBan</p>
-                <a href="/app" class="btn btn-primary btn-lg">Start Free Now →</a>
+        <section class="section-block" id="features">
+            <div class="container">
+                <div class="section-header">
+                    <p class="section-kicker">Features</p>
+                    <h2>Built for a tighter development loop.</h2>
+                    <p class="section-text">The landing page now mirrors the dashboard’s visual system so the product feels consistent from first visit to daily use.</p>
+                </div>
+
+                <div class="feature-grid">
+                    <article class="panel-card">
+                        <span class="panel-index">01</span>
+                        <h3>Unified board styling</h3>
+                        <p>Shared dark shell, same typography pair, same lane color logic, and matching card treatment.</p>
+                    </article>
+                    <article class="panel-card">
+                        <span class="panel-index">02</span>
+                        <h3>Task-first hierarchy</h3>
+                        <p>Every section uses denser information blocks and clearer contrast, closer to an actual ops board.</p>
+                    </article>
+                    <article class="panel-card">
+                        <span class="panel-index">03</span>
+                        <h3>Responsive by design</h3>
+                        <p>Desktop keeps the dramatic board preview, while mobile collapses into readable stacked panels.</p>
+                    </article>
+                    <article class="panel-card">
+                        <span class="panel-index">04</span>
+                        <h3>Action-oriented CTAs</h3>
+                        <p>The calls to action now point directly into the dashboard experience instead of generic marketing copy.</p>
+                    </article>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- FOOTER -->
+        <section class="section-block alt" id="workflow">
+            <div class="container workflow-grid">
+                <div class="section-header left">
+                    <p class="section-kicker">Workflow</p>
+                    <h2>Move from request to review without losing context.</h2>
+                    <p class="section-text">Each stage has a specific role. The UI reflects that by treating each lane like an operational space instead of a decorative card column.</p>
+                </div>
+
+                <div class="workflow-steps">
+                    <article class="workflow-card">
+                        <span class="workflow-number">1</span>
+                        <h3>Queue the task</h3>
+                        <p>Create a ticket in Idle with title, target folder, file type, and prompt.</p>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="workflow-number">2</span>
+                        <h3>Plan before build</h3>
+                        <p>Send the task into Plan, inspect the generated plan, then confirm the build step.</p>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="workflow-number">3</span>
+                        <h3>Review output fast</h3>
+                        <p>Once built, move straight into Review with file details and task history still attached.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block" id="faq">
+            <div class="container">
+                <div class="section-header">
+                    <p class="section-kicker">FAQ</p>
+                    <h2>Questions teams ask before adopting the board.</h2>
+                </div>
+
+                <div class="faq-list">
+                    <article class="faq-item">
+                        <h3>Is this just a kanban board skin?</h3>
+                        <p>No. The interface is shaped around a micro-SDLC flow, with task creation, AI planning, build confirmation, and review handoff already wired into the app.</p>
+                    </article>
+                    <article class="faq-item">
+                        <h3>Does the landing page now match the app?</h3>
+                        <p>Yes. The colors, shell, contrast, spacing, and card style are aligned with the dashboard frontend you asked for.</p>
+                    </article>
+                    <article class="faq-item">
+                        <h3>Can I open the board directly?</h3>
+                        <p>Yes. The primary action on this page takes users straight into <code>/app</code>.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-band">
+            <div class="container cta-wrap">
+                <div>
+                    <p class="section-kicker">Ready</p>
+                    <h2>Use the same interface language from landing page to workflow board.</h2>
+                </div>
+                <a href="/app" class="btn btn-primary btn-lg">Open Micro SDLC</a>
+            </div>
+        </section>
+    </main>
+
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <span class="logo-icon">📋</span>
-                        <span class="logo-text">KanBan</span>
-                    </div>
-                    <p>Simple, powerful task management</p>
-                </div>
-
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Product</h4>
-                        <a href="#features">Features</a>
-                        <a href="#pricing">Pricing</a>
-                        <a href="/app">Dashboard</a>
-                    </div>
-
-                    <div class="footer-column">
-                        <h4>Company</h4>
-                        <a href="#">About</a>
-                        <a href="#">Blog</a>
-                        <a href="#">Contact</a>
-                    </div>
-
-                    <div class="footer-column">
-                        <h4>Legal</h4>
-                        <a href="#">Privacy</a>
-                        <a href="#">Terms</a>
-                        <a href="#">Security</a>
-                    </div>
-                </div>
+        <div class="container footer-row">
+            <div>
+                <p class="brand-kicker">Micro SDLC</p>
+                <p class="footer-copy">Dark, compact workflow management for plan, build and review loops.</p>
             </div>
-
-            <div class="footer-bottom">
-                <p>&copy; 2024 KanBan. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#overview">Overview</a>
+                <a href="#features">Features</a>
+                <a href="#workflow">Workflow</a>
+                <a href="/app">Dashboard</a>
             </div>
         </div>
     </footer>

@@ -8,53 +8,75 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>KanBan AI - Plan, Build and Review</title>
+    <title>Micro SDLC - Plan, Build, Review and Ship</title>
 </head>
 
 <body>
-    <header>
-        <h2>KanBan AI</h2>
-        <div class="status" id="status-workflow">
-            <span id="circle-status">🟢</span>
-            <span id="status-text">0 tasks</span>
+    <header class="app-header">
+        <div class="header-brand">
+            <div>
+                <p class="eyebrow">Agent Workflow Board</p>
+                <h1>Micro SDLC</h1>
+            </div>
+            <p class="header-subtitle">Plan, Build, Review and Ship agents</p>
         </div>
-        <button id="theme">🌞</button>
+        <div class="header-actions">
+            <div class="status" id="status-workflow">
+                <span class="status-dot" id="circle-status"></span>
+                <span id="status-text">0 tasks</span>
+            </div>
+            <p class="workflow-hint">Plan → Build → Review → Ship</p>
+            <button id="theme" aria-label="Alternar tema">☀</button>
+        </div>
     </header>
 
-    <main>
-        <div class="columns">
-
-            <!-- IDLE -->
-            <div class="column">
-                <div class="column-header">
-                    <h3>IDLE</h3>
-                    <button class="add-task-btn" id="addTaskBtn">+</button>
+    <main class="board-shell">
+        <section class="board">
+            <div class="columns">
+                <div class="column idle-column">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <h3>IDLE</h3>
+                            <span class="column-count" data-count-for="idle">0</span>
+                        </div>
+                        <button class="add-task-btn" id="addTaskBtn">+ New Ticket</button>
+                    </div>
+                    <div class="tasks-container" data-column="idle" data-empty-text="No tickets"></div>
                 </div>
-                <div class="tasks-container" data-column="idle"></div>
-            </div>
 
-            <!-- PLAN -->
-            <div class="column">
-                <h3>Plan</h3>
-                <div class="tasks-container" data-column="plan"></div>
-            </div>
+                <div class="column plan-column">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <h3>PLAN</h3>
+                            <span class="column-count" data-count-for="plan">0</span>
+                        </div>
+                    </div>
+                    <div class="tasks-container" data-column="plan" data-empty-text="No tickets"></div>
+                </div>
 
-            <!-- BUILD -->
-            <div class="column">
-                <h3>Build</h3>
-                <div class="tasks-container" data-column="build"></div>
-            </div>
+                <div class="column build-column">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <h3>BUILD</h3>
+                            <span class="column-count" data-count-for="build">0</span>
+                        </div>
+                    </div>
+                    <div class="tasks-container" data-column="build" data-empty-text="No tickets"></div>
+                </div>
 
-            <!-- REVIEW -->
-            <div class="column">
-                <h3>Review</h3>
-                <div class="tasks-container" data-column="review"></div>
+                <div class="column review-column">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <h3>REVIEW</h3>
+                            <span class="column-count" data-count-for="review">0</span>
+                        </div>
+                    </div>
+                    <div class="tasks-container" data-column="review" data-empty-text="No tickets"></div>
+                </div>
             </div>
-
-        </div>
+        </section>
     </main>
 
-    <!-- Modal: Nova Tarefa -->
     <div id="taskModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -75,25 +97,23 @@
         </div>
     </div>
 
-    <!-- Modal: Plano da IA -->
     <div id="planModal" class="modal">
         <div class="modal-content modal-wide">
             <span class="close-plan">&times;</span>
-            <h2>📋 Plano da IA</h2>
+            <h2>Plano da IA</h2>
             <div class="plan-content">
                 <textarea id="planText" spellcheck="false"></textarea>
             </div>
             <div class="plan-actions">
-                <button id="confirmBuild" class="btn-confirm">🔨 Confirmar e Buildar</button>
+                <button id="confirmBuild" class="btn-confirm">Confirmar e Buildar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal: Detalhes da Task -->
     <div id="detailModal" class="modal">
         <div class="modal-content modal-wide">
             <span class="close-detail">&times;</span>
-            <h2>📄 Detalhes da Tarefa</h2>
+            <h2>Detalhes da Tarefa</h2>
             <div id="detailContent" class="detail-content"></div>
         </div>
     </div>
